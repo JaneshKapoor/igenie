@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowDownRight,
   ArrowUpRight,
+  FastForward,
   Lightbulb,
   PiggyBank,
   TrendingUp,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { AppHeader } from "@/components/app-header";
 import { GenieAvatar } from "@/components/genie/GenieAvatar";
 import { ScoreRing } from "@/components/dashboard/ScoreRing";
@@ -25,6 +27,7 @@ import {
 import { useGenieStore, GOAL_META } from "@/lib/store";
 import { formatINR, monthlyTotals, transactions } from "@/lib/mockData";
 import { getNudges, getScoreBreakdown } from "@/lib/insights";
+import { ChatSheet } from "@/components/chat/ChatSheet";
 
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
@@ -32,9 +35,36 @@ const fadeUp = {
 };
 
 export default function DashboardPage() {
-  const breakdown = useMemo(() => getScoreBreakdown(), []);
+  const baseBreakdown = useMemo(() => getScoreBreakdown(), []);
   const nudges = useMemo(() => getNudges(), []);
   const totals = useMemo(() => monthlyTotals(transactions), []);
+
+  /**
+   * Demo level-up: "July, if Ananya follows the plan" — SIP started
+   * (+20 diversification) and ₹4k less discretionary spend (+9 discipline).
+   * Same pure score function, better inputs.
+   */
+  const [julyApplied, setJulyApplied] = useState(false);
+  const breakdown = useMemo(() => {
+    if (!julyApplied) return baseBreakdown;
+    const improved = {
+      savingsRatio: baseBreakdown.savingsRatio + 4,
+      diversification: baseBreakdown.diversification + 20,
+      goalProgress: baseBreakdown.goalProgress + 2,
+      spendingDiscipline: baseBreakdown.spendingDiscipline + 9,
+    };
+    return {
+      ...improved,
+      total:
+        Math.round(
+          improved.savingsRatio * 0.3 +
+            improved.diversification * 0.25 +
+            improved.goalProgress * 0.25 +
+            improved.spendingDiscipline * 0.2
+        ),
+      tier: baseBreakdown.tier,
+    };
+  }, [julyApplied, baseBreakdown]);
 
   const tier = useGenieStore((s) => s.tier);
   const goal = useGenieStore((s) => s.goal);
@@ -178,6 +208,17 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
+                <Button
+                  className="w-full rounded-full"
+                  variant={julyApplied ? "secondary" : "default"}
+                  disabled={julyApplied}
+                  onClick={() => setJulyApplied(true)}
+                >
+                  <FastForward className="mr-1 h-4 w-4" />
+                  {julyApplied
+                    ? "July plan applied — genie grew!"
+                    : "Fast-forward: follow the plan"}
+                </Button>
                 {nudges.map((n) => (
                   <div
                     key={n.id}
@@ -201,6 +242,11 @@ export default function DashboardPage() {
           </motion.div>
         </div>
       </main>
+
+      {/* floating push-to-talk entry point */}
+      <div className="fixed bottom-14 right-5 z-50">
+        <ChatSheet />
+      </div>
     </div>
   );
 }
