@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppHeader } from "@/components/app-header";
+import { GenieAvatar } from "@/components/genie/GenieAvatar";
 
 export default function Home() {
   return (
@@ -11,6 +12,9 @@ export default function Home() {
         <span className="rounded-full bg-secondary px-4 py-1 text-xs font-medium text-secondary-foreground">
           IDBI Innovate 2026 · Wealth Advisory
         </span>
+        <div className="h-64 w-64 sm:h-80 sm:w-80">
+          <GenieAvatar />
+        </div>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
           Meet <span className="text-gradient-genie">iGenie</span>, your AI
           wealth companion
