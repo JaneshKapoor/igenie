@@ -44,9 +44,11 @@ export default async function Home({
         </div>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
           <TextGenerate text="Meet" />{" "}
-          <span className="text-gradient-genie">
-            <TextGenerate text="iGenie" delay={0.1} />
-          </span>
+          <TextGenerate
+            text="iGenie"
+            delay={0.1}
+            wordClassName="text-gradient-genie"
+          />
           <TextGenerate text=", your AI wealth companion" delay={0.2} />
         </h1>
         <p className="genie-voice max-w-xl text-lg text-muted-foreground">
