@@ -84,7 +84,7 @@ export function GenieModel() {
       leanX = 0.05;
       bobY = Math.sin(t * 2.2) * 0.04;
     } else if (mode === "celebrating") {
-      bobY = Math.abs(Math.sin(t * 5)) * 0.3;
+      bobY = Math.abs(Math.sin(t * 5)) * 0.22;
       swayZ = Math.sin(t * 8) * 0.06;
     }
 
@@ -99,7 +99,7 @@ export function GenieModel() {
     );
 
     // ----- tier scale (Spark 0.92 → Blaze 1.16) -----
-    const tierScale = 0.92 + tierIndex * 0.08;
+    const tierScale = 0.9 + tierIndex * 0.07;
     const sc = damp(g.scale.x, tierScale, 4, delta);
     g.scale.setScalar(sc);
 

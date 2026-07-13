@@ -3,8 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppHeader } from "@/components/app-header";
 import { GenieAvatar } from "@/components/genie/GenieAvatar";
+import { GenieStateControls } from "@/components/genie/GenieStateControls";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ debug?: string }>;
+}) {
+  const { debug } = await searchParams;
   return (
     <div className="flex flex-1 flex-col">
       <AppHeader />
@@ -28,6 +34,7 @@ export default function Home() {
             Summon your genie <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
         </Button>
+        {debug === "1" && <GenieStateControls />}
       </main>
     </div>
   );

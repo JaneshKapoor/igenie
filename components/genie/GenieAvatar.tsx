@@ -15,7 +15,7 @@ interface GenieAvatarProps {
  * The iGenie 3D avatar. Renders client-side only (Canvas has no SSR story),
  * with a soft CSS glow placeholder until the canvas mounts.
  */
-export function GenieAvatar({ className, zoom = 5 }: GenieAvatarProps) {
+export function GenieAvatar({ className, zoom = 5.4 }: GenieAvatarProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
