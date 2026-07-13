@@ -45,6 +45,64 @@ export function computeWealthScore(pillars: ScorePillars): ScoreBreakdown {
   return { ...pillars, total, tier: tierFromScore(total) };
 }
 
+// ---- Pillar derivation from raw account data ----
+
+import {
+  ASSET_CLASSES,
+  ESSENTIAL_CATEGORIES,
+  monthlyTotals,
+  spendByCategory,
+  type FinGoal,
+  type Investment,
+  type Transaction,
+} from "@/lib/mockData";
+
+export function derivePillars(
+  txns: Transaction[],
+  investments: Investment[],
+  goals: FinGoal[]
+): ScorePillars {
+  const { income, saved } = monthlyTotals(txns);
+
+  // (a) savings ratio — saving 30%+ of income = full marks
+  const savingsRatio = clamp((saved / income / 0.3) * 100);
+
+  // (b) diversification — distinct asset classes held, out of 5
+  const held = new Set(
+    investments.map((i) => i.type).filter((t) => (ASSET_CLASSES as string[]).includes(t))
+  );
+  const diversification = (held.size / ASSET_CLASSES.length) * 100;
+
+  // (c) goal progress — average completion across active goals
+  const goalProgress =
+    goals.length === 0
+      ? 0
+      : clamp(
+          (goals.reduce((s, g) => s + g.savedAmount / g.targetAmount, 0) /
+            goals.length) *
+            100
+        );
+
+  // (d) spending discipline — discretionary share of spend; 40% or less = full marks
+  const byCat = spendByCategory(txns);
+  const total = byCat.reduce((s, c) => s + c.amount, 0);
+  const essential = byCat
+    .filter((c) => ESSENTIAL_CATEGORIES.includes(c.category))
+    .reduce((s, c) => s + c.amount, 0);
+  const discretionaryShare = total === 0 ? 0 : (total - essential) / total;
+  const spendingDiscipline =
+    discretionaryShare <= 0.4
+      ? 100
+      : clamp(100 - ((discretionaryShare - 0.4) / 0.3) * 100);
+
+  return {
+    savingsRatio: Math.round(savingsRatio),
+    diversification: Math.round(diversification),
+    goalProgress: Math.round(goalProgress),
+    spendingDiscipline: Math.round(spendingDiscipline),
+  };
+}
+
 export const TIER_THRESHOLDS: Record<Tier, number> = {
   Spark: 0,
   Ember: 40,

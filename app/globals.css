@@ -75,11 +75,12 @@
   --border: #e2e7e1;
   --input: #e2e7e1;
   --ring: #00836c;
+  /* categorical chart palette — validated for CVD separation & 3:1 contrast */
   --chart-1: #00836c;
-  --chart-2: #f58220;
-  --chart-3: #4fa896;
-  --chart-4: #b2734d;
-  --chart-5: #8ac0b4;
+  --chart-2: #d96c1e;
+  --chart-3: #3674b5;
+  --chart-4: #b0455a;
+  --chart-5: #5c6a63; /* neutral, reserved for "Other" */
   --radius: 0.75rem;
   --sidebar: #f1f4f0;
   --sidebar-foreground: #1a2420;
@@ -118,10 +119,10 @@
   --input: #ffffff26;
   --ring: #1ea88d;
   --chart-1: #1ea88d;
-  --chart-2: #f58220;
-  --chart-3: #4fa896;
-  --chart-4: #c98d63;
-  --chart-5: #8ac0b4;
+  --chart-2: #e08137;
+  --chart-3: #6795cc;
+  --chart-4: #c96a7d;
+  --chart-5: #8fa198;
   --sidebar: #121b17;
   --sidebar-foreground: #e8eee9;
   --sidebar-primary: #1ea88d;
